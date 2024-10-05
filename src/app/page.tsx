@@ -1,10 +1,12 @@
-import React from 'react';
-// import { Pose } from '@mediapipe/pose';
+
+"use client";
+import React, { useRef, useEffect, useState } from "react";
 import PoseVideo from './components/PoseVideo';
 
-const Home: React.FC = () => {
+export default function Home() {
   return (
-    <PoseVideo />
+    <div>
+      <div>Home Page</div>
+    </div>
   );
-};
-export default Home;
+}
