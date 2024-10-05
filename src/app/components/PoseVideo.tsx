@@ -120,11 +120,11 @@ const PoseVideo: React.FC = () => {
       });
 
       // Initialize and start camera
-      if (!camera) {
+      if (!camera && videoElement) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         camera = new Camera(videoElement, {
           onFrame: async () => {
-            await pose.send({ image: videoElement });
+            await pose.send({image: videoElement});
           },
           width: 640,
           height: 480,
