@@ -9,6 +9,14 @@ body {
   /* background-color: #EEDDCC; */
 }
 
+.hover-drop-shadow {
+  transition: box-shadow 0.5s ease;
+}
+
+.hover-drop-shadow:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

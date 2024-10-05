@@ -1,5 +1,9 @@
 import React from "react";
 
 export default function Login() {
-  return <div>login</div>;
+  return (
+    <div className="flex w-screen h-screen items-center justify-center">
+      <div className="text-xl">COMING SOON...</div>
+    </div>
+  );
 }
