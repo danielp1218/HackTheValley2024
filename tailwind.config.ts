@@ -11,6 +11,8 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        beige: "#EEDDCC",
+        primary: "#34251F"
       },
 
       fontFamily: {
