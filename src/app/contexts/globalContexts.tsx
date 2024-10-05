@@ -1,5 +1,4 @@
 "use client";
-
 import React, {
   createContext,
   useContext,
@@ -9,17 +8,6 @@ import React, {
 } from "react";
 
 // Define the shape of the context state
-interface GlobalContextProps {
-  clothes: ClothingItem[];
-  cart: ClothingItem[];
-  setClothes: React.Dispatch<React.SetStateAction<ClothingItem[]>>;
-  addToCart: (item: ClothingItem) => void;
-  removeFromCart: (item: ClothingItem) => void;
-}
-
-// Create the context with a default value
-const GlobalContext = createContext<GlobalContextProps | undefined>(undefined);
-
 export interface ClothingItem {
   imageSrc: string;
   title: string;
@@ -27,18 +15,25 @@ export interface ClothingItem {
   color: string;
 }
 
-// Helper function to load cart from localStorage
-const loadCartFromLocalStorage = (): ClothingItem[] => {
-  if (typeof window !== "undefined") {
-    const savedCart = localStorage.getItem("cart");
-    return savedCart ? JSON.parse(savedCart) : [];
+interface GlobalContextProps {
+  clothes: ClothingItem[];
+  cart: ClothingItem[];
+  setClothes: React.Dispatch<React.SetStateAction<ClothingItem[]>>;
+  addToCart: (item: ClothingItem) => void;
+  removeFromCart: (index: number) => void;
+}
+
+const GlobalContext = createContext<GlobalContextProps | undefined>(undefined);
+
+export const useGlobalContext = (): GlobalContextProps => {
+  const context = useContext(GlobalContext);
+  if (!context) {
+    throw new Error("useGlobalContext must be used within a GlobalProvider");
   }
-  return [];
+  return context;
 };
 
-// Create a provider component
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
-  // Initialize default state for clothes
   const [clothes, setClothes] = useState<ClothingItem[]>([
     {
       imageSrc: "/eg1.png",
@@ -58,44 +53,35 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       price: "$60",
       color: "#CACBC5",
     },
-    {
-      imageSrc: "/eg1.png",
-      title: "Peace T-shirt",
-      price: "$15",
-      color: "#DAB1AC",
-    },
   ]);
 
-  // Set mounted to false initially, to avoid SSR issues
-  const [mounted, setMounted] = useState(false);
   const [cart, setCart] = useState<ClothingItem[]>([]);
+  const [mounted, setMounted] = useState(false);
 
-  // Load cart from localStorage after component mounts (only on the client side)
+  // Load cart from localStorage when the component mounts
   useEffect(() => {
-    const savedCart = loadCartFromLocalStorage();
-    setCart(savedCart);
-
-    // Indicate that the component is now mounted
-    setMounted(true);
+    if (typeof window !== "undefined") {
+      const savedCart = localStorage.getItem("cart");
+      if (savedCart) {
+        setCart(JSON.parse(savedCart));
+      }
+      setMounted(true);
+    }
   }, []);
 
-  // Sync localStorage whenever the cart changes (after mounting)
+  // Save cart to localStorage whenever it changes
   useEffect(() => {
     if (mounted) {
       localStorage.setItem("cart", JSON.stringify(cart));
     }
   }, [cart, mounted]);
 
-  // Add to cart and update localStorage
   const addToCart = (item: ClothingItem) => {
     setCart((prevCart) => [...prevCart, item]);
   };
 
-  // Remove from cart and update localStorage
-  const removeFromCart = (item: ClothingItem) => {
-    setCart((prevCart) =>
-      prevCart.filter((cartItem) => cartItem.title !== item.title)
-    );
+  const removeFromCart = (index: number) => {
+    setCart((prevCart) => prevCart.filter((_, i) => i !== index));
   };
 
   // Wait until the component is mounted to render the cart
@@ -110,13 +96,4 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </GlobalContext.Provider>
   );
-};
-
-// Custom hook to use the GlobalContext
-export const useGlobalContext = () => {
-  const context = useContext(GlobalContext);
-  if (context === undefined) {
-    throw new Error("useGlobalContext must be used within a GlobalProvider");
-  }
-  return context;
 };
