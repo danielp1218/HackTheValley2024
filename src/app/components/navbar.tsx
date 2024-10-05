@@ -2,15 +2,15 @@ import React from "react";
 
 export default function Navbar() {
   return (
-    <header className="px-8 py-10">
-      <div className="flex flex-row justify-between w-full">
+    <header className="sticky top-0 p-8 bg-beige z-50 text-primary">
+      <div className="flex flex-row w-full">
         <div className="flex">
           <a href="/" className="font-bold text-xl">
             BuyBye
           </a>
         </div>
 
-        <div className="flex space-x-8 font-semibold text-sm">
+        <div className="absolute left-1/2 transform -translate-x-1/2 flex space-x-8 font-semibold text-base">
           <a href="/men">MEN</a>
           <a href="/women">WOMEN</a>
           <a href="/kids">KIDS</a>
@@ -18,7 +18,7 @@ export default function Navbar() {
           <a href="/new">NEW</a>
         </div>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex ml-auto items-center space-x-4">
           <a href="/shoppingcart">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -35,9 +35,8 @@ export default function Navbar() {
               />
             </svg>
           </a>
-
           <a
-            className="rounded-2xl font-semibold border border-black px-6 py-1"
+            className="rounded-3xl font-bold border border-black px-8 py-1"
             href="/login"
           >
             Login
