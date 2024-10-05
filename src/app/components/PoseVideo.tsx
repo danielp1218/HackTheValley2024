@@ -48,9 +48,7 @@ const PoseVideo: React.FC = () => {
 
         // If pose landmarks are detected RAWR THEY FINALLY DTECTING R U GUYS PROUD
         if (results.poseLandmarks) {
-          // drawLandmarks(results.poseLandmarks, canvasCtx, canvasElement);
-          console.log(results.poseLandmarks);
-          console.log(results);
+          drawLandmarks(results.poseLandmarks, canvasCtx, canvasElement);
           setPoseLandmarks(results.poseLandmarks);
         }
       });
@@ -71,27 +69,39 @@ const PoseVideo: React.FC = () => {
   }, []);
 
   // DRAWING LANDMARKS AS THE RED DOTS FOR TESTING :D
-  // const drawLandmarks = (
-  //   poseLandmarks: Array<{ x: number; y: number; z: number }>,
-  //   canvasCtx: CanvasRenderingContext2D,
-  //   canvasElement: HTMLCanvasElement
-  // ) => {
-  //   poseLandmarks.forEach((landmark) => {
-  //     const x = landmark.x * canvasElement.width;
-  //     const y = landmark.y * canvasElement.height;
+  const drawLandmarks = (
+      poseLandmarks: Array<{ x: number; y: number; z: number }>,
+      canvasCtx: CanvasRenderingContext2D,
+      canvasElement: HTMLCanvasElement
+  ) => {
+    poseLandmarks.forEach((landmark) => {
+      const x = landmark.x * canvasElement.width;
+      const y = landmark.y * canvasElement.height;
+      canvasCtx.beginPath();
+      canvasCtx.arc(x, y, 5, 0, 2 * Math.PI);
+      canvasCtx.fillStyle = 'red';
+      canvasCtx.fill();
+    });
+  };
 
-  //     canvasCtx.beginPath();
-  //     canvasCtx.arc(x, y, 5, 0, 2 * Math.PI);
-  //     canvasCtx.fillStyle = 'red';
-  //     canvasCtx.fill();
-  //   });
-  // };
+  // draw landmarks when poseLandmarks are updated
+    useEffect(() => {
+        if (poseLandmarks && canvasRef.current) {
+          if ("getContext" in canvasRef.current) {
+            const canvasCtx = canvasRef.current.getContext('2d');
+            drawLandmarks(poseLandmarks, canvasCtx, canvasRef.current!);
+          }
+        }
+    }, [poseLandmarks]);
 
   return (
     <div>
       <video ref={videoRef} style={{ display: 'none' }}></video>
-      <canvas ref={canvasRef} width="640" height="480"></canvas>
-      <ClothingModel position={[0, 0, 0]} boneOrientation={poseLandmarks} />
+      <canvas ref={canvasRef} width="640" height="480" className="absolute left-50 top-50 z-0"></canvas>
+      <div className="absolute left-50 top-50 z-10 w-[640px] h-[480px]">
+        <ClothingModel position={[0, 0, 0]} poseData={poseLandmarks} />
+      </div>
+
     </div>
   );
 };
