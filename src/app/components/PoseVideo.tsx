@@ -1,80 +1,14 @@
-// "use client";
-// import React, { useRef, useEffect, useState } from 'react';
-// import { Pose } from '@mediapipe/pose';
 
-
-// const PoseVideo = () => {
-//   const videoRef = useRef(null);
-//   const [, setPoseResults] = useState(null);
-
-//   useEffect(() => {
-//     // Set up webcam
-//     navigator.mediaDevices.getUserMedia({ video: true })
-//         .then((stream) => {
-//           if (videoRef.current) {
-//             videoRef.current.srcObject = stream;
-//           }
-//         });
-
-//     // Set up MediaPipe Pose
-//     const pose = new Pose({
-//       locateFile: (file) => {
-//         return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
-//       }
-//     });
-
-//     pose.setOptions({
-//       runningMode: "VIDEO",
-//       modelComplexity: 1,
-//       smoothLandmarks: true,
-//       minDetectionConfidence: 0.5,
-//       minTrackingConfidence: 0.5
-//     });
-
-//     pose.onResults((results) => {
-//       setPoseResults(results);
-//     });
-
-//     if (videoRef.current) {
-//       const sendToMediaPipe = async () => {
-//         try {
-//           if (videoRef.current) {
-//             await pose.send({ image: videoRef.current }); // Send current video frame to MediaPipe
-//           }
-//         } catch (error) {
-//           console.error("Error sending frame to MediaPipe:", error);
-//         }
-    
-//         // Continue processing the next frame
-//         requestAnimationFrame(sendToMediaPipe);
-//       };
-    
-//       sendToMediaPipe(); // Start the loop
-//     }
-
-//     // console.log("Here");
-//     return () => {
-//       // console.log("RAWR", results.poseLandmarks)
-//       pose.close();
-//     };
-
-//   }, []);
-
-//   return (
-//       <div>
-//         <video ref={videoRef} autoPlay />
-//       </div>
-//   );
-// };
-// export default PoseVideo;
-
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState} from 'react';
 import { Pose, Results} from '@mediapipe/pose';
 import { Camera } from '@mediapipe/camera_utils';
+
+import ClothingModel from './ClothingModel';
 
 const PoseVideo: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [poseLandmarks, setPoseLandmarks] = useState<Array<{ x: number; y: number; z: number }> | null>(null);
   let camera: Camera | null = null;
 
   useEffect(() => {
@@ -116,6 +50,8 @@ const PoseVideo: React.FC = () => {
         if (results.poseLandmarks) {
           // drawLandmarks(results.poseLandmarks, canvasCtx, canvasElement);
           console.log(results.poseLandmarks);
+          console.log(results);
+          setPoseLandmarks(results.poseLandmarks);
         }
       });
 
@@ -155,6 +91,7 @@ const PoseVideo: React.FC = () => {
     <div>
       <video ref={videoRef} style={{ display: 'none' }}></video>
       <canvas ref={canvasRef} width="640" height="480"></canvas>
+      <ClothingModel position={[0, 0, 0]} boneOrientation={poseLandmarks} />
     </div>
   );
 };
