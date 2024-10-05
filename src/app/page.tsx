@@ -1,4 +1,6 @@
-import Image from "next/image";
+"use client";
+import React, { useRef, useEffect, useState } from 'react';
+import { Pose } from '@mediapipe/pose';
 
 export default function Home() {
   return (
@@ -6,4 +8,5 @@ export default function Home() {
       <div>Home Page</div>
     </div>
   );
-}
+};
+export default Home;
