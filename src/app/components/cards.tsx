@@ -1,9 +1,10 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 
 interface CardsProps {
   imageSrc: string;
   title: string;
   price: string;
+  color: string;
   clickHandler: () => void;
 }
 
@@ -11,6 +12,7 @@ export default function Cards({
   imageSrc,
   title,
   price,
+  color,
   clickHandler,
 }: CardsProps) {
   return (
@@ -26,12 +28,38 @@ export default function Cards({
 
         {/* try on button */}
         <button
-          className="rounded-3xl px-6 py-1 border border-black font-semibold"
+          className="try-on-button rounded-3xl px-6 py-1 border border-black font-semibold relative overflow-hidden"
           onClick={clickHandler}
+          style={{ "--button-bg-color": color } as CSSProperties} // Pass the color as a CSS variable
         >
-          Try-on
+          <span className="relative z-10">Try-on</span>
         </button>
       </div>
+
+      <style jsx>{`
+        .try-on-button::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: var(--button-bg-color); // Use the CSS variable
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.3s ease; /* Reduced duration */
+          z-index: 0;
+        }
+
+        .try-on-button:hover::before {
+          transform: scaleX(1);
+        }
+
+        .try-on-button span {
+          position: relative;
+          z-index: 1;
+        }
+      `}</style>
     </div>
   );
 }

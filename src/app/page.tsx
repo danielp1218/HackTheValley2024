@@ -1,19 +1,47 @@
-
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Cards from "./components/cards";
 
+interface ClothingItem {
+  imageSrc: string;
+  title: string;
+  price: string;
+  color: string;
+}
+
 export default function Home() {
-  const clothes = [
-    { imageSrc: "/eg1.png", title: "Peace T-shirt", price: "$15" },
-    { imageSrc: "/eg2.png", title: "Sports Jacket", price: "$55" },
-    { imageSrc: "/eg3.png", title: "Smart Blazer", price: "$60" },
-    { imageSrc: "/eg1.png", title: "Peace T-shirt", price: "$15" },
+  const clothes: ClothingItem[] = [
+    {
+      imageSrc: "/eg1.png",
+      title: "Peace T-shirt",
+      price: "$15",
+      color: "#DAB1AC",
+    },
+    {
+      imageSrc: "/eg2.png",
+      title: "Sports Jacket",
+      price: "$55",
+      color: "#C090A2",
+    },
+    {
+      imageSrc: "/eg3.png",
+      title: "Smart Blazer",
+      price: "$60",
+      color: "#CACBC5",
+    },
+    {
+      imageSrc: "/eg1.png",
+      title: "Peace T-shirt",
+      price: "$15",
+      color: "#DAB1AC",
+    },
   ];
 
-  function tryOn() {
+  function tryOn(item: ClothingItem, index: number) {
     console.log("try on clicked");
+    const query = encodeURIComponent(JSON.stringify(item));
+    window.location.href = `/product/${index}?data=${query}`;
   }
 
   return (
@@ -24,9 +52,7 @@ export default function Home() {
           {/* title text */}
           <div className="flex flex-col space-y-4 font-bold text-[64px] pt-[10%]">
             <h1>Your Virtual</h1>
-
             <h1>Fitting Room</h1>
-
             <h1>Awaits</h1>
           </div>
 
@@ -39,8 +65,8 @@ export default function Home() {
 
           {/* shop now button */}
           <div className="flex justify-start pt-[13%]">
-            <button className="inline-block text-white rounded-3xl px-8 py-3 bg-primary font-bold text-lg">
-              SHOP NOW
+            <button className="hover-drop-shadow inline-block text-white rounded-3xl px-8 py-3 bg-primary font-bold text-lg">
+              <a href="/new">SHOP NOW</a>
             </button>
           </div>
         </div>
@@ -64,19 +90,25 @@ export default function Home() {
 
         {/* clothing cards */}
         <div className="flex space-x-12 px-24">
-          {clothes.map((item) => (
+          {clothes.map((item, index) => (
             <Cards
+              key={index} // Add a unique key for each item
               imageSrc={item.imageSrc}
               title={item.title}
               price={item.price}
-              clickHandler={tryOn}
+              color={item.color}
+              clickHandler={() => tryOn(item, index)} // Pass a function reference
             />
           ))}
         </div>
 
         {/* see all button */}
         <div className="w-full flex justify-center py-20">
-          <button className="inline-block text-white rounded-3xl px-6 py-3 bg-primary font-bold text-lg">
+          <button
+            className="
+hover-drop-shadow inline-block text-white rounded-3xl px-6 py-3 bg-primary font-bold text-lg"
+            onClick={() => (window.location.href = "/new")}
+          >
             <span className="flex flex-row space-x-4 items-center">
               <span className="font-semibold">SEE ALL</span>
 
