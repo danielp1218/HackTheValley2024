@@ -2,7 +2,18 @@
 
 import React from "react";
 import Cards from "./components/cards";
+// <<<<<<< HEAD
+// import TryOn from "./components/tryon";
+
+// interface ClothingItem {
+//   imageSrc: string;
+//   title: string;
+//   price: string;
+//   color: string;
+// }
+// =======
 import { useGlobalContext, ClothingItem } from "./contexts/globalContexts";
+// >>>>>>> 7158f9e14cda48186c5bd1f5c602def66eb22950
 
 export default function Home() {
   const { clothes, setClothes } = useGlobalContext();
