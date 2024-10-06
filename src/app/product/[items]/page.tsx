@@ -14,6 +14,8 @@ export default function ProductPage() {
   const [selectedSize, setSelectedSize] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedSize(event.target.value);
   };
@@ -24,6 +26,23 @@ export default function ProductPage() {
 
   const handleCloseModal = () => {
     setIsModalVisible(false);
+  };
+
+  const handleAddToCart = () => {
+    setLoading(true);  // Set loading to true when the process starts
+
+    // Simulate the addToCart operation and navigation
+    addToCart({
+      imageSrc: item.imageSrc,
+      title: item.title,
+      price: item.price,
+      color: "#EEDDCC",
+    });
+
+    // Simulate a small delay before redirecting (you can remove this if not needed)
+    setTimeout(() => {
+      window.location.href = "/shoppingcart";
+    }, 1000);
   };
 
   if (!item) {
@@ -86,7 +105,7 @@ export default function ProductPage() {
                     <span className="font-semibold">{item.title}</span>
                     <span>{item.price}</span>
 
-                    <button
+                    {/* <button // BUTTON COMMEDED OUT DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
                       onClick={() => {
                         addToCart({
                           imageSrc: item.imageSrc,
@@ -99,13 +118,30 @@ export default function ProductPage() {
                       className="bg-primary rounded-3xl px-12 py-3 mt-8 text-white font-bold"
                     >
                       Add to cart
+                    </button> */}
+
+                    <button
+                      onClick={handleAddToCart}
+                      className="bg-primary rounded-3xl px-12 py-3 mt-8 text-white font-bold"
+                      disabled={loading}  // Disable the button while loading
+                      >
+                      {loading ? 'Adding...' : 'Add to cart'}
                     </button>
-                  </div>
+
+                    {/* Conditionally show the loading GIF if it's loading */}
+                    {loading && (
+                      <div>
+                        <img src="/loading.gif" alt="Loading" />
+                      </div>
+                    )}
+                  </div> 
                 </div>
+                
 
                 {/* <div>
                   <img src="/loading.gif" alt="loading" />
                 </div> */}
+
               </div>
             </div>
           </div>
