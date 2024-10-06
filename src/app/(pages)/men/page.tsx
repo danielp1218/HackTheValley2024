@@ -7,9 +7,9 @@ import LoadingScreen from "@/app/components/LoadingScreen";
 const Men: React.FC = () => {
     const {addToCart, } = useGlobalContext();
     const searchParams = useSearchParams();
-    const personImageUrl = decodeURIComponent(searchParams.get("person") || "");
-    const productImageUrl = decodeURIComponent(searchParams.get("product") || "");
-    const data = searchParams.get("data");
+    const personImageUrl = decodeURIComponent(searchParams?.get("person") || "");
+    const productImageUrl = decodeURIComponent(searchParams?.get("product") || "");
+    const data = searchParams?.get("data");
 
     let item = null;
     if (data) {
