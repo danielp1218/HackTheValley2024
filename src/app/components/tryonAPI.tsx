@@ -59,5 +59,9 @@ export default function TryOnAPI({ person, product }: TryOnAPIProps) {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
-  return resultUrl ? <img src={resultUrl} alt="Virtual Try-On Result" /> : null;
+  return resultUrl ? (
+    <img src={resultUrl} alt="Virtual Try-On Result" />
+  ) : (
+    <img src="/loading.gif" alt="Loading" />
+  );
 }

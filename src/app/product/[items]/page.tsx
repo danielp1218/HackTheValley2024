@@ -1,129 +1,147 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useGlobalContext, ClothingItem } from "../../contexts/globalContexts";
 import Webcam from "react-webcam";
 import { useSearchParams } from "next/navigation";
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from "framer-motion";
+import TryOnAPI from "../../components/tryonAPI";
 
 async function uploadToCloudinary(file) {
   const url = `https://api.cloudinary.com/v1_1/dyb0vicck/image/upload`;
 
   // Create a FormData object and append the file and other required fields
   const formData = new FormData();
-  formData.append('file', file);                          // File to upload
-  formData.append('upload_preset', 'ClothImages'); // Upload preset name
+  formData.append("file", file); // File to upload
+  formData.append("upload_preset", "ClothImages"); // Upload preset name
 
   try {
     const response = await fetch(url, {
-      method: 'POST',
-      body: formData as never
+      method: "POST",
+      body: formData as never,
     });
 
     if (!response.ok) {
-      throw new Error('Failed to upload image');
+      throw new Error("Failed to upload image");
     }
 
     const data = await response.json();
-    console.log('Upload successful:', data);
+    console.log("Upload successful:", data);
     return data; // Return the upload data (e.g., public URL)
   } catch (error) {
-    console.error('Error uploading image:', error);
+    console.error("Error uploading image:", error);
   }
 }
 
 function CountDown() {
-  const [count, setCount] = useState<number | null>(3)
+  const [count, setCount] = useState<number | null>(3);
 
   useEffect(() => {
-    if (count === null) return
+    if (count === null) return;
 
     if (count > 0) {
-      const timer = setTimeout(() => setCount(count - 1), 1000)
-      return () => clearTimeout(timer)
+      const timer = setTimeout(() => setCount(count - 1), 1000);
+      return () => clearTimeout(timer);
     } else {
-      const finishTimer = setTimeout(() => setCount(null), 1000)
-      return () => clearTimeout(finishTimer)
+      const finishTimer = setTimeout(() => setCount(null), 1000);
+      return () => clearTimeout(finishTimer);
     }
-  }, [count])
+  }, [count]);
 
   return (
-      <div className="absolute top-0 left-0 w-full flex justify-center items-center h-full bg-black bg-opacity-5 z-20">
-        <AnimatePresence mode="wait">
-          {count !== null && (
-              <motion.div
-                  key={count}
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.5 }}
-                  transition={{ duration: 0.2 }}
-                  className="text-white text-9xl font-bold"
-              >
-                {count === 0 ? "Cheese!" : count}
-              </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-  )
+    <div className="absolute top-0 left-0 w-full flex justify-center items-center h-full bg-black bg-opacity-5 z-20">
+      <AnimatePresence mode="wait">
+        {count !== null && (
+          <motion.div
+            key={count}
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            transition={{ duration: 0.2 }}
+            className="text-white text-9xl font-bold"
+          >
+            {count === 0 ? "Cheese!" : count}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 }
 
 const videoConstraints = {
   width: 900,
   height: 720,
-  facingMode: "user"
+  facingMode: "user",
 };
 
-const WebcamCapture = ({setModalRef}) => {
-
+const WebcamCapture = ({ setModalRef }) => {
+  const { setPersonURL } = useGlobalContext();
   const webcamRef = React.useRef(null);
   const [countingDown, setCountingDown] = useState(false);
-  const capture = React.useCallback(
-      () => {
-        // wait 3 seconds
-        setCountingDown(true);
-        setTimeout(() => {
-          const imageSrc = webcamRef.current.getScreenshot();
-          uploadToCloudinary(imageSrc).then(r => console.log(r.secure_url));
-          setCountingDown(false);
-          setModalRef(false);
-        }, 4000);
-      },
-      [webcamRef]
-  );
+  const searchParams = useSearchParams();
+  const data = searchParams.get("data");
+  const item = data ? JSON.parse(decodeURIComponent(data)) : null;
+  const capture = React.useCallback(() => {
+    // wait 3 seconds
+    setCountingDown(true);
+    setTimeout(() => {
+      const imageSrc = webcamRef.current.getScreenshot();
+      uploadToCloudinary(imageSrc).then((r) => {
+        const personParam = encodeURIComponent(r.secure_url);
+        const productParam = encodeURIComponent(item.imageSrc);
+        console.log(personParam);
+        console.log(productParam);
+        window.location.href = `/men?person=${personParam}&product=${productParam}&data=${data}`;
+      });
+      setModalRef(1);
+      setCountingDown(false);
+    }, 4000);
+  }, [webcamRef]);
   return (
-      <>
-        <div className="flex">
-          <div className="">
-            <Webcam
-                audio={false}
-                ref={webcamRef}
-                screenshotFormat="image/jpeg"
-                height={videoConstraints.height}
-                width={videoConstraints.width}
-                videoConstraints={videoConstraints}
-                className="rounded-md"
+    <>
+      <div className="flex">
+        <div className="">
+          <Webcam
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+            height={videoConstraints.height}
+            width={videoConstraints.width}
+            videoConstraints={videoConstraints}
+            className="rounded-md"
+          />
+          {countingDown ? <CountDown /> : <></>}
+          <button onClick={capture} className="absolute bottom-32 left-[30%]">
+            <img
+              src="/photo-icon.svg"
+              alt="photo"
+              className="rounded-[9999px] h-14 w-14 bg-white p-1"
             />
-            {countingDown? <CountDown/> : <></>}
-            <button onClick={capture} className="absolute bottom-32 left-[30%]">
-              <img src="/photo-icon.svg" alt="photo" className="rounded-[9999px] h-14 w-14 bg-white p-1"/>
-            </button>
-            <form className="absolute bottom-32 right-[50%]">
-              <label htmlFor="fileUpload">
-                <img src="/img-icon.svg" alt="photo" className="rounded-[9999px] h-14 w-14 bg-white p-1" style={{cursor:"pointer"}}/>
-              </label>
-              <input hidden id="fileUpload" type="file" accept="image/*" className="hidden size-0"/>
-            </form>
-          </div>
-          <div className="w-20 h-full p-20">
-            <h2>
-                Placeholder Text
-            </h2>
-            <p>Placeholder text</p>
-          </div>
+          </button>
+          <form className="absolute bottom-32 right-[50%]">
+            <label htmlFor="fileUpload">
+              <img
+                src="/img-icon.svg"
+                alt="photo"
+                className="rounded-[9999px] h-14 w-14 bg-white p-1"
+                style={{ cursor: "pointer" }}
+              />
+            </label>
+            <input
+              hidden
+              id="fileUpload"
+              type="file"
+              accept="image/*"
+              className="hidden size-0"
+            />
+          </form>
         </div>
-      </>
+      </div>
+    </>
   );
 };
 export default function ProductPage() {
+  const { addToCart, personURL } = useGlobalContext();
   const searchParams = useSearchParams();
   const data = searchParams.get("data");
   const item = data ? JSON.parse(decodeURIComponent(data)) : null;
@@ -131,8 +149,9 @@ export default function ProductPage() {
 
   const [selectedSize, setSelectedSize] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [resultURL, setResultURL] = useState("");
 
-  const [loading, setLoading] = useState(false);
+  const [modalState, setModalState] = useState(0);
 
   const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedSize(event.target.value);
@@ -147,8 +166,6 @@ export default function ProductPage() {
   };
 
   const handleAddToCart = () => {
-    setLoading(true);  // Set loading to true when the process starts
-
     // Simulate the addToCart operation and navigation
     addToCart({
       imageSrc: item.imageSrc,
@@ -166,6 +183,18 @@ export default function ProductPage() {
   if (!item) {
     return <div>Item not found</div>;
   }
+
+  // useEffect(() => {
+  //   if (modalState === 1) {
+  //     console.log(personURL)
+  //     console.log(item.imageSrc)
+  //     const personParam = encodeURIComponent(personURL);
+  //     const productParam = encodeURIComponent(item.imageSrc);
+  //     console.log(personParam);
+  //     console.log(productParam);
+  //     window.location.href = `/men?person=${personParam}&product=${productParam}`;
+  //   }
+  // }, [modalState]);
 
   return (
     <>
@@ -209,61 +238,12 @@ export default function ProductPage() {
                 </svg>
               </button>
               <div className="modal-content">
-<<<<<<< HEAD
                 {/* Add your modal content here */}
-                <div className="flex flex-row pb-4 px-6">
-                  <div className="w-1/2">
-                    <img
-                      className="object-contain max-w-full max-h-full"
-                      src="/test.png"
-                      alt="test"
-                    />
-                  </div>
-
-                  <div className="text-xl pl-8 flex flex-col justify-center w-1/2">
-                    <span className="font-semibold">{item.title}</span>
-                    <span>{item.price}</span>
-
-                    {/* <button // BUTTON COMMEDED OUT DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
-                      onClick={() => {
-                        addToCart({
-                          imageSrc: item.imageSrc,
-                          title: item.title,
-                          price: item.price,
-                          color: "#EEDDCC",
-                        });
-                        window.location.href = "/shoppingcart";
-                      }}
-                      className="bg-primary rounded-3xl px-12 py-3 mt-8 text-white font-bold"
-                    >
-                      Add to cart
-                    </button> */}
-
-                    <button
-                      onClick={handleAddToCart}
-                      className="bg-primary rounded-3xl px-12 py-3 mt-8 text-white font-bold"
-                      disabled={loading}  // Disable the button while loading
-                      >
-                      {loading ? 'Adding...' : 'Add to cart'}
-                    </button>
-
-                    {/* Conditionally show the loading GIF if it's loading */}
-                    {loading && (
-                      <div>
-                        <img src="/loading.gif" alt="Loading" />
-                      </div>
-                    )}
-                  </div> 
-                </div>
-                
-
-                {/* <div>
-                  <img src="/loading.gif" alt="loading" />
-                </div> */}
-
-=======
-                <WebcamCapture setModalRef={setIsModalVisible}/>
->>>>>>> 6a50ab4194d0c73e8955ddf988c711ed61724532
+                {modalState === 0 ? (
+                  <WebcamCapture setModalRef={setModalState} />
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
           </div>

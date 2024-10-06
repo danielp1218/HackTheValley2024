@@ -18,6 +18,8 @@ export interface ClothingItem {
 interface GlobalContextProps {
   clothes: ClothingItem[];
   cart: ClothingItem[];
+  personURL: string;
+  setPersonURL: React.Dispatch<React.SetStateAction<string>>;
   setClothes: React.Dispatch<React.SetStateAction<ClothingItem[]>>;
   addToCart: (item: ClothingItem) => void;
   removeFromCart: (index: number) => void;
@@ -36,27 +38,31 @@ export const useGlobalContext = (): GlobalContextProps => {
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [clothes, setClothes] = useState<ClothingItem[]>([
     {
-      imageSrc: "/eg1.png",
-      title: "Peace T-shirt",
-      price: "$15",
+      imageSrc:
+        "https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/476119/sub/goods_476119_sub14.jpg?width=750",
+      title: "KAWS + WARHOL SWEATSHIRT",
+      price: "$49.90",
       color: "#DAB1AC",
     },
     {
-      imageSrc: "/eg2.png",
-      title: "Sports Jacket",
-      price: "$55",
+      imageSrc:
+        "https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/422992/sub/goods_422992_sub14.jpg?width=750",
+      title: "CREW NECK SHORT SLEEVE T-SHIRT",
+      price: "$24.90",
       color: "#C090A2",
     },
     {
-      imageSrc: "/eg3.png",
-      title: "Smart Blazer",
-      price: "$60",
+      imageSrc:
+        "https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/460322/item/goods_31_460322.jpg?width=750",
+      title: "SWEATSHIRT",
+      price: "$39.90",
       color: "#CACBC5",
     },
   ]);
 
   const [cart, setCart] = useState<ClothingItem[]>([]);
   const [mounted, setMounted] = useState(false);
+  const [personURL, setPersonURL] = useState("");
 
   // Load cart from localStorage when the component mounts
   useEffect(() => {
@@ -91,7 +97,15 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <GlobalContext.Provider
-      value={{ clothes, cart, setClothes, addToCart, removeFromCart }}
+      value={{
+        clothes,
+        cart,
+        personURL,
+        setClothes,
+        addToCart,
+        removeFromCart,
+        setPersonURL,
+      }}
     >
       {children}
     </GlobalContext.Provider>

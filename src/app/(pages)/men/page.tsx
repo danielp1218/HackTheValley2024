@@ -1,19 +1,24 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { useGlobalContext } from "../../contexts/globalContexts";
+import { div } from "framer-motion/client";
 
 const Men: React.FC = () => {
+  const { addToCart, personURL } = useGlobalContext();
+  const searchParams = useSearchParams();
+  const personImageUrl = decodeURIComponent(searchParams.get("person") || "");
+  const productImageUrl = decodeURIComponent(searchParams.get("product") || "");
+  const data = searchParams.get("data");
+  const item = data ? JSON.parse(decodeURIComponent(data)) : null;
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [resultUrl, setResultUrl] = useState("");
-  const personImageUrl =
-    "https://huggingface.co/spaces/Kwai-Kolors/Kolors-Virtual-Try-On/resolve/main/assets/human/005.png"; // Replace with your actual person image URL
-  const productImageUrl =
-    "https://huggingface.co/spaces/Kwai-Kolors/Kolors-Virtual-Try-On/resolve/main/assets/cloth/09_upper.png"; // Replace with your actual product image URL
 
   const performVirtualTryOn = async () => {
     setLoading(true);
     setError("");
-
     try {
       const response = await fetch("/api/tryon", {
         method: "POST",
@@ -22,13 +27,10 @@ const Men: React.FC = () => {
         },
         body: JSON.stringify({ personImageUrl, productImageUrl }),
       });
-
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
-
       const data = await response.json();
-
       // Handle the final result directly
       handleResult(data);
     } catch (error) {
@@ -37,7 +39,6 @@ const Men: React.FC = () => {
       setLoading(false);
     }
   };
-
   const handleResult = (data: any) => {
     // Handle the final result here
     if (data.status === "success" && data.output) {
@@ -46,17 +47,32 @@ const Men: React.FC = () => {
       setError("Failed to get the virtual try-on result.");
     }
   };
-
   useEffect(() => {
     if (personImageUrl && productImageUrl) {
       performVirtualTryOn();
     }
   }, [personImageUrl, productImageUrl]);
-
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
 
-  return resultUrl ? <img src={resultUrl} alt="Virtual Try-On Result" /> : null;
+  return resultUrl ? (
+    <div className="flex flex-row">
+      <img className="" src={resultUrl} alt="Virtual Try-On Result" />
+
+      <button
+        className=""
+        onClick={() => {
+          addToCart({
+            imageSrc: item.imageSrc,
+            title: item.title,
+            price: item.price,
+            color: "#EEDDCC",
+          });
+        }}
+      >
+        Add to bag
+      </button>
+    </div>
+  ) : null;
 };
 
 export default Men;
