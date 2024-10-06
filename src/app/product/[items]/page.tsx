@@ -5,7 +5,6 @@ import { useGlobalContext, ClothingItem } from "../../contexts/globalContexts";
 import Webcam from "react-webcam";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import TryOnAPI from "../../components/tryonAPI";
 
 async function uploadToCloudinary(file) {
   const url = `https://api.cloudinary.com/v1_1/dyb0vicck/image/upload`;
