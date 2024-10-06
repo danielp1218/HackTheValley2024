@@ -10,7 +10,15 @@ const Men: React.FC = () => {
   const personImageUrl = decodeURIComponent(searchParams.get("person") || "");
   const productImageUrl = decodeURIComponent(searchParams.get("product") || "");
   const data = searchParams.get("data");
-  const item = data ? JSON.parse(decodeURIComponent(data)) : null;
+
+  let item = null;
+  if (data) {
+    try {
+      item = JSON.parse(decodeURIComponent(data));
+    } catch (error) {
+      console.error("Failed to parse data:", error);
+    }
+  }
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -61,12 +69,16 @@ const Men: React.FC = () => {
       <button
         className=""
         onClick={() => {
-          addToCart({
-            imageSrc: item.imageSrc,
-            title: item.title,
-            price: item.price,
-            color: "#EEDDCC",
-          });
+          if (item) {
+            addToCart({
+              imageSrc: item.imageSrc,
+              title: item.title,
+              price: item.price,
+              color: "#EEDDCC",
+            });
+          } else {
+            console.error("Item data is not available");
+          }
         }}
       >
         Add to bag
