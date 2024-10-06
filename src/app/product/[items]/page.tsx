@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import TryOn from "../../components/tryon";
 import { useSearchParams } from "next/navigation";
 
 export default function ProductPage() {
@@ -11,9 +10,18 @@ export default function ProductPage() {
   const colors = [item.color, "#90BEC0", "#9A90C0", "#874343"];
 
   const [selectedSize, setSelectedSize] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedSize(event.target.value);
+  };
+
+  const handleTryOnClick = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
   };
 
   if (!item) {
@@ -33,11 +41,41 @@ export default function ProductPage() {
             />
 
             {/* try on button */}
-            <button className="absolute top-0 left-[47%] transform -translate-x-1/2 translate-y-6 rounded-3xl font-medium border border-black px-8 py-1 z-20">
+            <button
+              onClick={handleTryOnClick}
+              className="btn-try-on absolute top-0 left-[47%] transform -translate-x-1/2 translate-y-6 rounded-3xl font-medium border border-black px-8 py-1 z-20"
+            >
               Try On
             </button>
           </div>
         </div>
+
+        {isModalVisible && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <button className="close-btn" onClick={handleCloseModal}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18 18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+              <div className="modal-content">
+                {/* Add your modal content here */}
+                <p>Try on feature coming soon!</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* item details */}
         <div className="flex flex-col">
@@ -113,9 +151,6 @@ export default function ProductPage() {
             </button>
           </div>
         </div>
-      </div>
-      <div className="flex flex-row items-center justify-center">
-        <TryOn title={item.title} price={item.price} />
       </div>
     </>
   );
