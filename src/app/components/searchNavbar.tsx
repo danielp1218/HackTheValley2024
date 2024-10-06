@@ -1,8 +1,10 @@
 'use client';
 import React, {useState} from "react";
+import handler from "@/pages/api/scrapeWebsite";
 
 export default function SearchNavbar() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [result, setResult] = useState("");
 
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);
@@ -13,11 +15,32 @@ export default function SearchNavbar() {
   //   onSearch(searchTerm);  // Call the parent component's search handler
   // };
 
-  const handleKeyDown = (e) => {
+  // const handleKeyDown = (e) => {
+  //   if (e.key === 'Enter') {
+  //     e.preventDefault();
+  //     console.log("ENTERED");
+  //     // onSearch(searchTerm);  // Calls the parent component's search handler
+  //     // a
+  //   }
+  // };
+
+  const handleKeyDown = async (e) => {
+    // console.log(searchTerm);
     if (e.key === 'Enter') {
       e.preventDefault();
-      console.log("ENTERED");
-      // onSearch(searchTerm);  // Calls the parent component's search handler
+      try {
+        const response = await fetch(`/api/scrapeWebsite?url=${searchTerm}`);
+        if (response.ok) {
+          const data = await response.json();
+          console.log("RAWRRRRRRRRRRRRRRRRRRR", data);
+          setResult(data);  
+          setSearchTerm('');  // maybe add some loading aimatio or some shit here later idk
+        } else {
+          console.error("Error fetching data from the scraper");
+        }
+      } catch (error) {
+        console.error("Error: ", error);
+      }
     }
   };
 
