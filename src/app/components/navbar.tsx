@@ -1,4 +1,5 @@
 import React from "react";
+import SearchNavbar from "./searchNavbar";
 
 export default function Navbar() {
   return (
@@ -10,12 +11,13 @@ export default function Navbar() {
           </a>
         </div>
 
-        <div className="absolute left-1/2 transform -translate-x-1/2 flex space-x-8 font-semibold text-base">
-          <a href="/men">MEN</a>
+        <div className="absolute left-1/2 transform -translate-x-1/2 flex space-x-8 font-semibold text-base w-1/2">
+          {/* <a href="/men">MEN</a>
           <a href="/women">WOMEN</a>
           <a href="/kids">KIDS</a>
           <a href="/collections">COLLECTIONS</a>
-          <a href="/new">NEW</a>
+          <a href="/new">NEW</a> */}
+          <SearchNavbar/>
         </div>
 
         <div className="flex ml-auto items-center space-x-4">
