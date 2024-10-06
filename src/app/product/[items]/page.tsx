@@ -6,8 +6,6 @@ import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from 'framer-motion'
 
 
-
-
 function CountDown() {
   const [count, setCount] = useState<number | null>(3)
 
