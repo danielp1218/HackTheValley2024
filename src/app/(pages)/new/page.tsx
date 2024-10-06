@@ -5,7 +5,7 @@ import Cards from "../../components/cards";
 import { useGlobalContext, ClothingItem } from "../../contexts/globalContexts";
 
 export default function New() {
-  const { clothes, setClothes } = useGlobalContext();
+  const { clothes,  } = useGlobalContext();
 
   function tryOn(item: ClothingItem, index: number) {
     console.log("try on clicked");

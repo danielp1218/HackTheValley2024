@@ -41,7 +41,7 @@ export default function TryOnAPI({ person, product }: TryOnAPIProps) {
     }
   };
 
-  const handleResult = (data: any) => {
+  const handleResult = (data) => {
     // Handle the final result here
     if (data.status === "success" && data.output) {
       setResultUrl(data.output); // Directly assign data.output since it's a string

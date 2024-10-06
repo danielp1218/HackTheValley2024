@@ -9,6 +9,10 @@ body {
   /* background-color: #EEDDCC; */
 }
 
+.bg-primary {
+  background-color: #8d8d8d;
+}
+
 .hover-drop-shadow {
   transition: box-shadow 0.5s ease;
 }

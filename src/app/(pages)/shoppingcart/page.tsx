@@ -1,11 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useGlobalContext, ClothingItem } from "../../contexts/globalContexts";
+import { useGlobalContext } from "../../contexts/globalContexts";
 
 export default function Shoppingcart() {
-  const { cart, addToCart, removeFromCart } = useGlobalContext();
+  const { cart, removeFromCart } = useGlobalContext();
   const [total, setTotal] = useState<number>(0);
-  const [deliveryFee, setDeliveryFee] = useState<number>(10);
 
   // calculate total price, parse string and remove $
   function calculateTotal() {

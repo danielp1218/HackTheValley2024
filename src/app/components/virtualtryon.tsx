@@ -70,7 +70,7 @@ const VirtualTryOn: React.FC<VirtualTryOnProps> = ({
     }
   };
 
-  const handleResult = (data: any) => {
+  const handleResult = (data) => {
     // Handle the final result here
     if (data.status === "success" && data.output.length > 0) {
       setResultUrl(data.output[0]);

@@ -1,12 +1,12 @@
 import puppeteer from 'puppeteer';
 import * as cheerio from 'cheerio';
-
+/*
 type Product = {
     url: string;
     name: string;
     imageUrl: string;
     price: string;
-}
+}*/
 
 export async function scrape(url: string){
     const browser = await puppeteer.launch();
@@ -26,6 +26,7 @@ export async function scrape(url: string){
     return [];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function scrapeSSENSE($, url: string) {
     const image = $(".product-detail-new").eq(0).attr('src');
     const name = $(".pdp-product-title__left").eq(0).text();

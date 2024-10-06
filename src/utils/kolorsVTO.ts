@@ -9,7 +9,7 @@ async function file(url: string): Promise<File> {
 }
 
 // Wrap the code in an async function
-export async function main(): Promise<any> {
+export async function main() {
   try {
     console.log("Fetching example image...");
     const response_0 = await fetch("https://raw.githubusercontent.com/gradio-app/gradio/main/test/test_files/bus.png");

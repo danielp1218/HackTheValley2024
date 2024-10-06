@@ -16,7 +16,7 @@ import { useGlobalContext, ClothingItem } from "./contexts/globalContexts";
 // >>>>>>> 7158f9e14cda48186c5bd1f5c602def66eb22950
 
 export default function Home() {
-  const { clothes, setClothes } = useGlobalContext();
+  const { clothes } = useGlobalContext();
 
   function tryOn(item: ClothingItem, index: number) {
     console.log("try on clicked");

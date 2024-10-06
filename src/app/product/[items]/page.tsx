@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useGlobalContext, ClothingItem } from "../../contexts/globalContexts";
+import { useGlobalContext } from "../../contexts/globalContexts";
 import Webcam from "react-webcam";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -74,7 +74,6 @@ const videoConstraints = {
 };
 
 const WebcamCapture = ({ setModalRef }) => {
-  const { setPersonURL } = useGlobalContext();
   const webcamRef = React.useRef(null);
   const [countingDown, setCountingDown] = useState(false);
   const searchParams = useSearchParams();
@@ -141,7 +140,7 @@ const WebcamCapture = ({ setModalRef }) => {
   );
 };
 export default function ProductPage() {
-  const { addToCart, personURL } = useGlobalContext();
+  const { addToCart } = useGlobalContext();
   const searchParams = useSearchParams();
   const data = searchParams.get("data");
   const item = data ? JSON.parse(decodeURIComponent(data)) : null;
@@ -149,7 +148,6 @@ export default function ProductPage() {
 
   const [selectedSize, setSelectedSize] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [resultURL, setResultURL] = useState("");
 
   const [modalState, setModalState] = useState(0);
 

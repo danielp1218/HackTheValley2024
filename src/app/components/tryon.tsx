@@ -1,6 +1,5 @@
 import React from "react";
 import PoseVideo from "./PoseVideo";
-import { Pose } from "@mediapipe/pose";
 import TryOnButton from "./tryonButton";
 
 interface TryOnProps {

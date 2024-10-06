@@ -4,9 +4,9 @@ import {Canvas, useFrame} from '@react-three/fiber';
 import {PerspectiveCamera, useGLTF} from '@react-three/drei';
 import {Object3D, Object3DEventMap} from "three";
 
-const boneSet = new Set([
-    'lShldrBend', 'rShldrBend', 'lForearmBend', 'rForearmBend', 'lHand', 'rHand', 'lThighBend', 'rThighBend', 'head'
-]);
+//const boneSet = new Set([
+//    'lShldrBend', 'rShldrBend', 'lForearmBend', 'rForearmBend', 'lHand', 'rHand', 'lThighBend', 'rThighBend', 'head'
+//]);
 
 const boneMapping = {
     11: 'lShldrBend', // left shoulder
@@ -26,7 +26,7 @@ const Model = ({position, scale, poseData}) => {
     const gltf = useGLTF('/jacket2.glb');
     const skinnedMeshRef: React.MutableRefObject<Object3D<Object3DEventMap> | undefined> = useRef();
     const bonesMap = useRef({});
-    const [pos, setPos] = useState([0, 0, 0]);
+    const [pos, setPos] = useState(position);
 
     /*useEffect(() => {
         gltf.scene.position.set(0, 0, 0);
@@ -126,7 +126,7 @@ const Model = ({position, scale, poseData}) => {
                 }
             });
             if(length > 0){
-                let avg = [avgX/length, avgY/length];
+                const avg = [avgX/length, avgY/length];
                 setPos ( [-320 + avg[0] * 640, 240 - avg[1] * 480, 15]);
                 console.log(avg);
             } else return;
@@ -144,7 +144,7 @@ const Model = ({position, scale, poseData}) => {
 const ClothingModel = ({position, poseData}) => {
     return (
         <Canvas>
-            <directionalLight position={[0,0,15]}/>
+            <directionalLight position={position}/>
             <Model position={[0,0,0]} scale={2} poseData={poseData}/>
             <PerspectiveCamera
                 makeDefault

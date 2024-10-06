@@ -7,12 +7,6 @@ export default function SearchNavbar() {
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);
   };
-
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    await onSearch(searchTerm);
-  };
-
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
