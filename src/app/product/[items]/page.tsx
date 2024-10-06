@@ -5,6 +5,31 @@ import Webcam from "react-webcam";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from 'framer-motion'
 
+async function uploadToCloudinary(file) {
+  const url = `https://api.cloudinary.com/v1_1/dyb0vicck/image/upload`;
+
+  // Create a FormData object and append the file and other required fields
+  const formData = new FormData();
+  formData.append('file', file);                          // File to upload
+  formData.append('upload_preset', 'ClothImages'); // Upload preset name
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData as never
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to upload image');
+    }
+
+    const data = await response.json();
+    console.log('Upload successful:', data);
+    return data; // Return the upload data (e.g., public URL)
+  } catch (error) {
+    console.error('Error uploading image:', error);
+  }
+}
 
 function CountDown() {
   const [count, setCount] = useState<number | null>(3)
@@ -57,7 +82,7 @@ const WebcamCapture = ({setModalRef}) => {
         setCountingDown(true);
         setTimeout(() => {
           const imageSrc = webcamRef.current.getScreenshot();
-          console.log(imageSrc);
+          uploadToCloudinary(imageSrc).then(r => console.log(r.secure_url));
           setCountingDown(false);
           setModalRef(false);
         }, 4000);
