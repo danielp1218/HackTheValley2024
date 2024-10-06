@@ -1,6 +1,14 @@
 'use client';
 import React, {useState} from "react";
 import handler from "@/pages/api/scrapeWebsite";
+import ClothingModel from "./ClothingModel";
+
+interface ClothingItem {
+  imageSrc: string;
+  title: string;
+  price: string;
+  color: string;
+}
 
 export default function SearchNavbar() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -35,6 +43,17 @@ export default function SearchNavbar() {
           console.log("RAWRRRRRRRRRRRRRRRRRRR", data);
           setResult(data);  
           setSearchTerm('');  // maybe add some loading aimatio or some shit here later idk
+          
+
+          const clothingItem: ClothingItem = {
+            imageSrc: data.imageUrl,    
+            title: data.name,       
+            price: data.price,   
+            color: 'white',           
+          };
+
+          tryOn(clothingItem, 100);
+          
         } else {
           console.error("Error fetching data from the scraper");
         }
@@ -43,6 +62,12 @@ export default function SearchNavbar() {
       }
     }
   };
+
+  function tryOn(item: ClothingItem, index: number) {
+    console.log("try on clicked");
+    const query = encodeURIComponent(JSON.stringify(item));
+    window.location.href = `/product/${index}?data=${query}`;
+  }
 
   return (
     <div className="flex justify-center w-full">
