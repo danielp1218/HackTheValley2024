@@ -2,8 +2,10 @@
 
 import React, { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useGlobalContext, ClothingItem } from "../../contexts/globalContexts";
 
 export default function ProductPage() {
+  const { addToCart } = useGlobalContext();
   const searchParams = useSearchParams();
   const data = searchParams.get("data");
   const item = data ? JSON.parse(decodeURIComponent(data)) : null;
@@ -71,7 +73,24 @@ export default function ProductPage() {
               </button>
               <div className="modal-content">
                 {/* Add your modal content here */}
-                <p>Try on feature coming soon!</p>
+                <div className="flex flex-row pb-4 px-6">
+                  <div className="w-1/2">
+                    <img
+                      className="object-contain max-w-full max-h-full"
+                      src="/test.png"
+                      alt="test"
+                    />
+                  </div>
+
+                  <div className="text-xl pl-8 flex flex-col w-1/2">
+                    <span className="font-semibold">{item.title}</span>
+                    <span>{item.price}</span>
+                  </div>
+                </div>
+
+                {/* <div>
+                  <img src="/loading.gif" alt="loading" />
+                </div> */}
               </div>
             </div>
           </div>
@@ -146,7 +165,18 @@ export default function ProductPage() {
           </div>
 
           <div className="mt-auto mb-8">
-            <button className="bg-primary rounded-3xl px-12 py-3 text-white font-bold">
+            <button
+              onClick={() => {
+                addToCart({
+                  imageSrc: item.imageSrc,
+                  title: item.title,
+                  price: item.price,
+                  color: "#EEDDCC",
+                });
+                window.location.href = "/shoppingcart";
+              }}
+              className="bg-primary rounded-3xl px-12 py-3 text-white font-bold"
+            >
               Add to cart
             </button>
           </div>

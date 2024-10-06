@@ -44,7 +44,7 @@ body {
   border-radius: 8px;
   position: relative;
   width: 80%;
-  max-width: 500px;
+  max-width: 1000px;
   z-index: 1001; /* Ensure the modal itself is on top */
 }
 
