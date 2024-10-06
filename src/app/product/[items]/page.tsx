@@ -114,7 +114,7 @@ export default function ProductPage() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col border-red-300 border-2 items-center justify-center">
+      <div className="flex flex-row items-center justify-center">
         <TryOn title={item.title} price={item.price} />
       </div>
     </>

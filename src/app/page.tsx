@@ -2,42 +2,21 @@
 
 import React from "react";
 import Cards from "./components/cards";
-import TryOn from "./components/tryon";
+// <<<<<<< HEAD
+// import TryOn from "./components/tryon";
 
-interface ClothingItem {
-  imageSrc: string;
-  title: string;
-  price: string;
-  color: string;
-}
+// interface ClothingItem {
+//   imageSrc: string;
+//   title: string;
+//   price: string;
+//   color: string;
+// }
+// =======
+import { useGlobalContext, ClothingItem } from "./contexts/globalContexts";
+// >>>>>>> 7158f9e14cda48186c5bd1f5c602def66eb22950
 
 export default function Home() {
-  const clothes: ClothingItem[] = [
-    {
-      imageSrc: "/eg1.png",
-      title: "Peace T-shirt",
-      price: "$15",
-      color: "#DAB1AC",
-    },
-    {
-      imageSrc: "/eg2.png",
-      title: "Sports Jacket",
-      price: "$55",
-      color: "#C090A2",
-    },
-    {
-      imageSrc: "/eg3.png",
-      title: "Smart Blazer",
-      price: "$60",
-      color: "#CACBC5",
-    },
-    {
-      imageSrc: "/eg1.png",
-      title: "Peace T-shirt",
-      price: "$15",
-      color: "#DAB1AC",
-    },
-  ];
+  const { clothes, setClothes } = useGlobalContext();
 
   function tryOn(item: ClothingItem, index: number) {
     console.log("try on clicked");

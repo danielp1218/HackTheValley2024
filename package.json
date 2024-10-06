@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@babylonjs/core": "^7.28.0",
     "@mediapipe/camera_utils": "^0.3.1675466862",
     "@mediapipe/pose": "^0.5.1675469404",
     "@react-three/drei": "^9.114.0",
@@ -19,6 +20,7 @@
     "three": "^0.169.0"
   },
   "devDependencies": {
+    "@gradio/client": "^1.6.0-beta.3",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
