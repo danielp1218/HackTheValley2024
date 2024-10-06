@@ -91,7 +91,8 @@ const WebcamCapture = ({ setModalRef }) => {
         const productParam = encodeURIComponent(item.imageSrc);
         console.log(personParam);
         console.log(productParam);
-        window.location.href = `/men?person=${personParam}&product=${productParam}&data=${data}`;
+        const newData = encodeURIComponent(JSON.stringify(item));
+        window.location.href = `/men?person=${personParam}&product=${productParam}&data=${newData}`;
       });
       setModalRef(1);
       setCountingDown(false);
@@ -318,7 +319,10 @@ export default function ProductPage() {
           </div>
 
           <div className="mt-auto mb-8">
-            <button className="bg-primary rounded-3xl px-12 py-3 text-white font-bold">
+            <button
+              onClick={() => handleAddToCart()}
+              className="bg-primary rounded-3xl px-12 py-3 text-white font-bold"
+            >
               Add to cart
             </button>
           </div>

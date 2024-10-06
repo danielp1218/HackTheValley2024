@@ -63,29 +63,38 @@ const Men: React.FC = () => {
   if (loading) return <p>Loading...</p>;
 
   return resultUrl ? (
-    <div className="h-full">
-      <div className="flex flex-row border border-green-600 justify-around">
-        <div className="p-10 bg-indigo-300">
-          <img className="rounded-lg object-contain h-48 w-96" src={resultUrl} alt="Virtual Try-On Result" />
+    <div className="flex justify-center">
+      <div className="flex flex-row">
+        <div className="rounded-3xl mt-16 p-6 bg-gray-300 max-h-[40%]">
+          <img
+            className="rounded-3xl object-contain w-full h-full"
+            src={resultUrl}
+            alt="Virtual Try-On Result"
+          />
         </div>
 
-        <button
-          className="border border-red-600 px-10 h-10 bg-black text-white rounded-full"
-          onClick={() => {
-            if (item) {
-              addToCart({
-                imageSrc: item.imageSrc,
-                title: item.title,
-                price: item.price,
-                color: "#EEDDCC",
-              });
-            } else {
-              console.error("Item data is not available");
-            }
-          }}
-        >
-          Add to bag
-        </button>
+        <div className="mt-64 ml-16">
+          <button
+            className="px-10 h-10 bg-primary text-white rounded-full"
+            onClick={() => {
+              if (item) {
+                addToCart({
+                  imageSrc: item.imageSrc,
+                  title: item.title,
+                  price: item.price,
+                  color: "#EEDDCC",
+                });
+                setTimeout(() => {
+                  window.location.href = "/shoppingcart";
+                }, 1000);
+              } else {
+                console.error("Item data is not available");
+              }
+            }}
+          >
+            Add to bag
+          </button>
+        </div>
       </div>
     </div>
   ) : null;

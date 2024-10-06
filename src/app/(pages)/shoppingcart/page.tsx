@@ -101,7 +101,7 @@ export default function Shoppingcart() {
         </div>
       )}
 
-      <button
+      {/* <button
         onClick={() => {
           console.log(cart);
         }}
@@ -120,7 +120,7 @@ export default function Shoppingcart() {
         }}
       >
         add
-      </button>
+      </button> */}
     </div>
   );
 }
