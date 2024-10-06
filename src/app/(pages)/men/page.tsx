@@ -65,15 +65,16 @@ const Men: React.FC = () => {
   return resultUrl ? (
     <div className="flex justify-center">
       <div className="flex flex-row">
-        <div className="rounded-3xl mt-16 p-6 bg-gray-300 max-h-[40%]">
+        <div className="rounded-3xl mt-16 p-6 max-h-[40%]">
           <img
-            className="rounded-3xl object-contain w-full h-full"
+            className="rounded-3xl shadow-lg object-contain w-full h-full"
             src={resultUrl}
             alt="Virtual Try-On Result"
           />
         </div>
 
-        <div className="mt-64 ml-16">
+        <div className="mt-24 ml-16">
+          <p className="font-bold text-xl">{item.title}</p>
           <button
             className="px-10 h-10 bg-primary text-white rounded-full"
             onClick={() => {
@@ -92,7 +93,7 @@ const Men: React.FC = () => {
               }
             }}
           >
-            Add to bag
+            <span className="font-semibold">Add to bag</span>
           </button>
         </div>
       </div>

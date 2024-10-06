@@ -40,14 +40,14 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     {
       imageSrc:
         "https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/476119/sub/goods_476119_sub14.jpg?width=750",
-      title: "KAWS + WARHOL SWEATSHIRT",
+      title: "KAWS SWEATSHIRT",
       price: "$49.90",
       color: "#DAB1AC",
     },
     {
       imageSrc:
         "https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/422992/sub/goods_422992_sub14.jpg?width=750",
-      title: "CREW NECK SHORT SLEEVE T-SHIRT",
+      title: "CREW NECK T-SHIRT",
       price: "$24.90",
       color: "#C090A2",
     },
@@ -56,6 +56,20 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         "https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/460322/item/goods_31_460322.jpg?width=750",
       title: "SWEATSHIRT",
       price: "$39.90",
+      color: "#CACBC5",
+    },
+    {
+      imageSrc:
+        "https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/469259/sub/goods_469259_sub14.jpg?width=750",
+      title: "UT ARCHIVE ART",
+      price: "$19.90",
+      color: "#CACBC5",
+    },
+    {
+      imageSrc:
+        "https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/469257/item/goods_00_469257.jpg?width=750",
+      title: "UT ARCHIVE ART",
+      price: "$19.90",
       color: "#CACBC5",
     },
   ]);
