@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Prepare payload for the Stable Diffusion API
     const payload = {
-      key: "bnaBWXAFb3eWMUYfY6Hw4T2a5fx81UE1e97wo4RfMskKK5wV5UwWPOlJ0WSq",
+      key: "SJeyQrKd0m1Xt63jvKlS3zDKWjNWcmoVuQuRtP1P2wLLpdSJXOVc7HggFVtg",
       prompt: "A realistic photo",
       negative_prompt: "Low quality, unrealistic, bad cloth, warped cloth",
       init_image: personImageUrl,
