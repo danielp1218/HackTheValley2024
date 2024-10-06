@@ -73,7 +73,7 @@ export default function ProductPage() {
               </button>
               <div className="modal-content">
                 {/* Add your modal content here */}
-                <div className="flex flex-row pb-4 px-6">
+                {/* <div className="flex flex-row pb-4 px-6">
                   <div className="w-1/2">
                     <img
                       className="object-contain max-w-full max-h-full"
@@ -86,7 +86,7 @@ export default function ProductPage() {
                     <span className="font-semibold">{item.title}</span>
                     <span>{item.price}</span>
                   </div>
-                </div>
+                </div> */}
 
                 {/* <div>
                   <img src="/loading.gif" alt="loading" />
@@ -175,7 +175,7 @@ export default function ProductPage() {
                 });
                 window.location.href = "/shoppingcart";
               }}
-              className="bg-primary rounded-3xl px-12 py-3 text-white font-bold"
+              className="bg-primary rounded-3xl px-12 py-3 mt-8 text-white font-bold"
             >
               Add to cart
             </button>
