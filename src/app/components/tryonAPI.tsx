@@ -1,14 +1,17 @@
 "use client";
 import { useState, useEffect } from "react";
 
-const Men: React.FC = () => {
+interface TryOnAPIProps {
+  person: string;
+  product: string;
+}
+
+export default function TryOnAPI({ person, product }: TryOnAPIProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [resultUrl, setResultUrl] = useState("");
-  const personImageUrl =
-    "https://huggingface.co/spaces/Kwai-Kolors/Kolors-Virtual-Try-On/resolve/main/assets/human/005.png"; // Replace with your actual person image URL
-  const productImageUrl =
-    "https://huggingface.co/spaces/Kwai-Kolors/Kolors-Virtual-Try-On/resolve/main/assets/cloth/09_upper.png"; // Replace with your actual product image URL
+  const personImageUrl = { person };
+  const productImageUrl = { product };
 
   const performVirtualTryOn = async () => {
     setLoading(true);
@@ -57,6 +60,4 @@ const Men: React.FC = () => {
   if (error) return <p>{error}</p>;
 
   return resultUrl ? <img src={resultUrl} alt="Virtual Try-On Result" /> : null;
-};
-
-export default Men;
+}
