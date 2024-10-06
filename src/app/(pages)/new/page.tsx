@@ -16,7 +16,7 @@ export default function New() {
   return (
     <div className="flex flex-col text-primary">
       <div className="flex w-full justify-center pt-16 pb-12">
-        <span className="text-4xl font-bold">FEATURED PRODUCTS</span>
+        <span className="text-4xl font-bold">OUR PRODUCTS</span>
       </div>
 
       {/* clothing cards */}

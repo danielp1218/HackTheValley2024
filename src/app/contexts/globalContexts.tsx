@@ -36,24 +36,21 @@ export const useGlobalContext = (): GlobalContextProps => {
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [clothes, setClothes] = useState<ClothingItem[]>([
     {
-      imageSrc:
-        "https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/465185/sub/goods_465185_sub14.jpg?width=750",
-      title: "AIRism COTTON OVERSIZED CREW NECK",
-      price: "$24.90",
+      imageSrc: "/eg1.png",
+      title: "Peace T-shirt",
+      price: "$15",
       color: "#DAB1AC",
     },
     {
-      imageSrc:
-        "https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/465193/sub/goods_465193_sub14.jpg?width=750",
-      title: "AIRism COTTON CREW NECK T-SHIRT",
-      price: "$29.90",
+      imageSrc: "/eg2.png",
+      title: "Sports Jacket",
+      price: "$55",
       color: "#C090A2",
     },
     {
-      imageSrc:
-        "https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/476119/sub/goods_476119_sub14.jpg?width=750",
-      title: "KAWS + WARHOL SWEATSHIRT",
-      price: "$49.90",
+      imageSrc: "/eg3.png",
+      title: "Smart Blazer",
+      price: "$60",
       color: "#CACBC5",
     },
   ]);

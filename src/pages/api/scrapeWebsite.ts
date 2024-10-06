@@ -5,4 +5,3 @@ export default async function handler(req, res) {
     const result = await scrape(url);
     res.status(200).json(result);
 }
-//

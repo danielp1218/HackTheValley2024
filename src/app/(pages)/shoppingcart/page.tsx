@@ -11,10 +11,9 @@ export default function Shoppingcart() {
   function calculateTotal() {
     let sum = 0;
     cart.forEach((item) => {
-      sum += parseFloat(item.price.replace("$", ""));
+      sum += parseInt(item.price.replace("$", ""));
     });
-    const roundedTotal = (sum + deliveryFee).toFixed(2);
-    setTotal(parseFloat(roundedTotal));
+    setTotal(sum);
   }
 
   // update the total price when cart changes
@@ -74,7 +73,7 @@ export default function Shoppingcart() {
             <div className="flex flex-col space-y-8 pt-6 space-y-2 p-10 border-2 bg-[#F1F1F1] w-3/4">
               <div className="flex flex-row w-full pt-8">
                 <span className="font-extrabold">Subtotal</span>
-                <span className="ml-auto">${(total - 10).toFixed(2)}</span>
+                <span className="ml-auto">${total - 10}</span>
               </div>
 
               <div className="flex flex-row w-full">
@@ -89,7 +88,7 @@ export default function Shoppingcart() {
 
               <div className="flex flex-row w-full">
                 <span className="font-semibold">Total</span>
-                <span className="ml-auto">${total.toFixed(2)}</span>
+                <span className="ml-auto">${total}</span>
               </div>
 
               <div>
@@ -102,7 +101,7 @@ export default function Shoppingcart() {
         </div>
       )}
 
-      {/* <button
+      <button
         onClick={() => {
           console.log(cart);
         }}
@@ -121,7 +120,7 @@ export default function Shoppingcart() {
         }}
       >
         add
-      </button> */}
+      </button>
     </div>
   );
 }

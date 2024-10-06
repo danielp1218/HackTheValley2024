@@ -1,11 +1,129 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Webcam from "react-webcam";
 import { useSearchParams } from "next/navigation";
-import { useGlobalContext, ClothingItem } from "../../contexts/globalContexts";
+import { motion, AnimatePresence } from 'framer-motion'
 
+async function uploadToCloudinary(file) {
+  const url = `https://api.cloudinary.com/v1_1/dyb0vicck/image/upload`;
+
+  // Create a FormData object and append the file and other required fields
+  const formData = new FormData();
+  formData.append('file', file);                          // File to upload
+  formData.append('upload_preset', 'ClothImages'); // Upload preset name
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData as never
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to upload image');
+    }
+
+    const data = await response.json();
+    console.log('Upload successful:', data);
+    return data; // Return the upload data (e.g., public URL)
+  } catch (error) {
+    console.error('Error uploading image:', error);
+  }
+}
+
+function CountDown() {
+  const [count, setCount] = useState<number | null>(3)
+
+  useEffect(() => {
+    if (count === null) return
+
+    if (count > 0) {
+      const timer = setTimeout(() => setCount(count - 1), 1000)
+      return () => clearTimeout(timer)
+    } else {
+      const finishTimer = setTimeout(() => setCount(null), 1000)
+      return () => clearTimeout(finishTimer)
+    }
+  }, [count])
+
+  return (
+      <div className="absolute top-0 left-0 w-full flex justify-center items-center h-full bg-black bg-opacity-5 z-20">
+        <AnimatePresence mode="wait">
+          {count !== null && (
+              <motion.div
+                  key={count}
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-white text-9xl font-bold"
+              >
+                {count === 0 ? "Cheese!" : count}
+              </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+  )
+}
+
+const videoConstraints = {
+  width: 900,
+  height: 720,
+  facingMode: "user"
+};
+
+const WebcamCapture = ({setModalRef}) => {
+
+  const webcamRef = React.useRef(null);
+  const [countingDown, setCountingDown] = useState(false);
+  const capture = React.useCallback(
+      () => {
+        // wait 3 seconds
+        setCountingDown(true);
+        setTimeout(() => {
+          const imageSrc = webcamRef.current.getScreenshot();
+          uploadToCloudinary(imageSrc).then(r => console.log(r.secure_url));
+          setCountingDown(false);
+          setModalRef(false);
+        }, 4000);
+      },
+      [webcamRef]
+  );
+  return (
+      <>
+        <div className="flex">
+          <div className="">
+            <Webcam
+                audio={false}
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
+                height={videoConstraints.height}
+                width={videoConstraints.width}
+                videoConstraints={videoConstraints}
+                className="rounded-md"
+            />
+            {countingDown? <CountDown/> : <></>}
+            <button onClick={capture} className="absolute bottom-32 left-[30%]">
+              <img src="/photo-icon.svg" alt="photo" className="rounded-[9999px] h-14 w-14 bg-white p-1"/>
+            </button>
+            <form className="absolute bottom-32 right-[50%]">
+              <label htmlFor="fileUpload">
+                <img src="/img-icon.svg" alt="photo" className="rounded-[9999px] h-14 w-14 bg-white p-1" style={{cursor:"pointer"}}/>
+              </label>
+              <input hidden id="fileUpload" type="file" accept="image/*" className="hidden size-0"/>
+            </form>
+          </div>
+          <div className="w-20 h-full p-20">
+            <h2>
+                Placeholder Text
+            </h2>
+            <p>Placeholder text</p>
+          </div>
+        </div>
+      </>
+  );
+};
 export default function ProductPage() {
-  const { addToCart } = useGlobalContext();
   const searchParams = useSearchParams();
   const data = searchParams.get("data");
   const item = data ? JSON.parse(decodeURIComponent(data)) : null;
@@ -91,6 +209,7 @@ export default function ProductPage() {
                 </svg>
               </button>
               <div className="modal-content">
+<<<<<<< HEAD
                 {/* Add your modal content here */}
                 <div className="flex flex-row pb-4 px-6">
                   <div className="w-1/2">
@@ -142,6 +261,9 @@ export default function ProductPage() {
                   <img src="/loading.gif" alt="loading" />
                 </div> */}
 
+=======
+                <WebcamCapture setModalRef={setIsModalVisible}/>
+>>>>>>> 6a50ab4194d0c73e8955ddf988c711ed61724532
               </div>
             </div>
           </div>
@@ -216,18 +338,7 @@ export default function ProductPage() {
           </div>
 
           <div className="mt-auto mb-8">
-            <button
-              onClick={() => {
-                addToCart({
-                  imageSrc: item.imageSrc,
-                  title: item.title,
-                  price: item.price,
-                  color: "#EEDDCC",
-                });
-                window.location.href = "/shoppingcart";
-              }}
-              className="bg-primary rounded-3xl px-12 py-3 mt-8 text-white font-bold"
-            >
+            <button className="bg-primary rounded-3xl px-12 py-3 text-white font-bold">
               Add to cart
             </button>
           </div>
