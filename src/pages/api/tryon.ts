@@ -21,54 +21,95 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ message: 'Missing parameters' });
     }
 
-    // Prepare payload for the Kolors API
+    // Prepare payload for the Stable Diffusion API
     const payload = {
-      data: [
-        { path: personImageUrl },
-        { path: productImageUrl },
-        0, // Assuming this is a valid value
-        true, // Assuming this is a valid value
-      ],
-      fn_index: 2,   // The function index used in the API request
-  session_hash: "ggsq87xbx6t",  // Use your existing session hash
-  trigger_id: 26  // The trigger_id you're using
+      key: "iA14OI48QiWh9gERb055BYQgtACtEbJ0xfry4KURAUmDRl6upnw4oL0SWxKY",
+      prompt: "A realistic photo",
+      negative_prompt: "Low quality, unrealistic, bad cloth, warped cloth",
+      init_image: personImageUrl,
+      cloth_image: productImageUrl,
+      cloth_type: "upper_body",
+      height: 466,
+      width: 700,
+      guidance_scale: 8.0,
+      num_inference_steps: 20,
+      seed: 128915590,
+      temp: "no",
+      webhook: null,
+      track_id: null 
     };
 
     // Log the payload before sending
-    console.log('Payload to Kolors API:', JSON.stringify(payload));
+    console.log('Payload to Stable Diff API:', JSON.stringify(payload));
 
-    // Make request to Kolors API
-const apiResponse = await fetch('https://kwai-kolors-kolors-virtual-try-on.hf.space/queue/join?', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(payload),
-});
+    // Make request to Stable Diffusion API
+    const apiResponse = await fetch('https://stablediffusionapi.com/api/v5/fashion', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
 
     // Log the API response status
     console.log('API response status:', apiResponse.status);
 
-    // Check for non-200 responses
     if (!apiResponse.ok) {
       const errorMessage = await apiResponse.text();
-      console.error('Error from Kolors API:', errorMessage);
+      console.error('Error from Stable Diffusion API:', errorMessage);
       return res.status(apiResponse.status).json({ message: errorMessage });
     }
 
     const data = await apiResponse.json();
-    return res.status(200).json(data); // Return the response data
-  } catch (error: unknown) {
-    console.error('Error in tryon handler:', error);
+    console.log('Response from Stable Diffusion API:', data);
 
-    // Type guard to handle known error types
-    if (error instanceof Error) {
-      // Log error details
-      console.error('Error details:', error.message);
-      return res.status(500).json({ message: 'Internal Server Error', error: error.message });
+    // Check if the response status is processing
+    if (data.status === 'processing') {
+      const fetchResultUrl = data.fetch_result;
+
+      // Wait for 30 seconds before fetching the result
+      setTimeout(async () => {
+        try {
+          const fetchResultResponse = await fetch(fetchResultUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+          });
+
+          if (!fetchResultResponse.ok) {
+            const fetchResultErrorMessage = await fetchResultResponse.text();
+            console.error('Error from fetch result API:', fetchResultErrorMessage);
+            return res.status(fetchResultResponse.status).json({ message: fetchResultErrorMessage });
+          }
+
+          const fetchResultData = await fetchResultResponse.json();
+          console.log('Fetch result response:', fetchResultData);
+
+          // Return the final result
+          res.status(200).json(fetchResultData);
+        } catch (fetchResultError) {
+          console.error('Error in fetch result handler:', fetchResultError);
+
+          if (fetchResultError instanceof Error) {
+            res.status(500).json({ message: 'Internal Server Error', error: fetchResultError.message });
+          } else {
+            res.status(500).json({ message: 'Internal Server Error', error: String(fetchResultError) });
+          }
+        }
+      }, 30000); // 30 seconds delay
     } else {
-      // Handle unknown error types
-      return res.status(500).json({ message: 'Internal Server Error', error: 'An unknown error occurred.' });
+      // Return the response data if not processing
+      res.status(200).json(data);
+    }
+  } catch (error) {
+    console.error('Error in tryon handler:', error); // Log the error
+
+    if (error instanceof Error) {
+      res.status(500).json({ message: 'Internal Server Error', error: error.message }); // Return the error message
+    } else {
+      res.status(500).json({ message: 'Internal Server Error', error: String(error) }); // Handle unknown error type
     }
   }
 }
