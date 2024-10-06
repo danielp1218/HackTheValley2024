@@ -2,6 +2,7 @@
 
 import React from "react";
 import Cards from "./components/cards";
+import TryOn from "./components/tryon";
 
 interface ClothingItem {
   imageSrc: string;
