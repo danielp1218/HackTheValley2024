@@ -35,8 +35,8 @@ function scrapeSSENSE($, url: string) {
 }
 
 function scrapeUNIQLO($, url: string) {
-    const carousal = $(".thumbnail-section__content").eq(0);
-    const image = carousal.children().eq(Math.min(2, carousal.children().length - 1)).children().eq(0).attr("src");
+    const carousal = $(".fr-product-image").eq(0);
+    const image = carousal.children().eq(1).attr("src");
 
     const name = $("title").eq(0).text();
     const price = $(".price-original").eq(0).text();
