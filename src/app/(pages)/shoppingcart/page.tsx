@@ -10,7 +10,8 @@ export default function Shoppingcart() {
   function calculateTotal() {
     let sum = 0;
     cart.forEach((item) => {
-      sum += parseInt(item.price.replace("$", ""));
+      const price = item.price.replace(/CAD\s?\$|\$/g, "");
+      sum += parseInt(price);
     });
     setTotal(sum);
   }

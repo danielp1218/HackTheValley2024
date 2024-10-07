@@ -68,8 +68,8 @@ function CountDown() {
 }
 
 const videoConstraints = {
-  width: 900,
-  height: 720,
+  width: 728,
+  height: 1024,
   facingMode: "user",
 };
 

@@ -19,15 +19,13 @@ const config = {
     },
     extend: {
       colors: {
+        beige: "#EEDDCC",
+        primary: "#34251F",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
@@ -53,6 +51,7 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -72,6 +71,9 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],
